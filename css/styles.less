@@ -1,0 +1,372 @@
+header{
+	height:50px;
+	background:#484848;
+}
+
+body{
+	background:#eaeaea;
+	margin:0;
+}
+
+#main{
+
+	width:960px;
+	margin:60px auto;
+}
+
+.level-container{
+	width:30%;
+	float:left;
+	background:white;
+	margin-right:10px;
+	margin-top:20px;
+	padding:10px 0;
+	height:500px;
+	overflow:auto;
+    -webkit-box-shadow:  -5px 3px 5px 1px #eee;
+    -moz-box-shadow:  -5px 3px 5px 1px #eee;
+    box-shadow:  -5px 3px 5px 1px #eee;    
+	ul{
+		list-style-type: none;
+		padding: 0px;
+		margin: 0px;
+	}
+	li{
+		&.directory{
+			background-image: url("../images/folder_doc.png");
+		}
+		&.file{
+			background-image: url("../images/file.png");
+			&.pdf{
+				background-image: url("../images/pdf.png");
+			}
+			&.doc, &.docx{
+				background-image: url("../images/doc.png");
+			}
+			&.rar{
+				background-image: url("../images/rar.png");
+			}
+			&.zip{
+				background-image: url("../images/zip.png");
+			}
+		}
+		background-repeat: no-repeat;
+		background-position: 10px 2px; 
+		padding:0 10px 0 35px; 
+		//list-style:square url("../images/folder_doc.png") 	;
+		line-height:25px;
+		&.active{
+			//background-color:#bababa;
+			background-color:#eee;
+			a{
+				color:#394a59;
+			}
+		}
+	}
+	a{
+		color:#666;
+		text-decoration:none;
+		width:100%;
+		display:block;
+	}
+
+}
+
+#fourth-level{
+	display:none;
+}
+
+.custom-menu {
+    z-index:1000;
+    position: absolute;
+    background-color:white;
+    border: 1px solid #c8d6fc;
+    padding: 2px;
+    color:#666;
+    -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+    -webkit-box-shadow:  1px 1px 1px 2px #eee;
+    -moz-box-shadow:  1px 1px 1px 2px #eee;
+    box-shadow:  1px 1px 1px 2px #eee;
+         
+}
+
+#search-results{
+	width:214px;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+	-ms-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+	-o-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+	background: white;
+	border: 1px solid #B9B9B9;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 8px;
+	position: absolute;
+	z-index: 20;
+	//left:160px;
+	top:25px;
+	display:none;
+	.header{
+		height: 26px;
+		position: relative;
+		border-bottom: 1px solid gainsboro;
+		margin-bottom: 6px;
+		text-align: center;
+		h2{
+			font-size:16px;
+			margin:0;
+			padding:0;
+			color:#666;
+		}
+	}
+	.category{
+		font-weight:bold;
+		border-bottom:1px solid #eaeaea;
+		padding-top:5px;
+		//text-align:center;
+		color:#666;
+	}
+	li{
+		width:214px;
+		overflow-x:hidden;
+		&.directory{
+			background-image: url("../images/folder_doc.png");
+		}
+		&.file{
+			background-image: url("../images/file.png");
+			&.pdf{
+				background-image: url("../images/pdf.png");
+			}
+			&.doc, &.docx{
+				background-image: url("../images/doc.png");
+			}
+			&.rar{
+				background-image: url("../images/rar.png");
+			}
+			&.zip{
+				background-image: url("../images/zip.png");
+			}
+		}
+		background-repeat: no-repeat;
+		background-position: 10px 2px; 
+		padding:0 10px 0 35px; 
+		//list-style:square url("../images/folder_doc.png") 	;
+		line-height:25px;
+	}
+	ul{
+		margin:0;
+		list-style:none;
+		padding:0;
+		li a{
+			color:#666;
+			text-decoration:none;
+		}
+	}
+}
+
+header{
+	position:fixed;
+	width:100%;
+	top:0;
+	#logo{
+		height: 45px;
+		margin-top: 2px;
+		float:left;
+	}
+	#search-form{
+		//width:300px;
+		//margin:0 auto;
+		//float:left;
+		position:absolute;
+		//left:30px;
+		margin:14px 0 0 160px;
+		input{
+			border-radius:3px;
+			border-top-right-radius:0;
+			border-bottom-right-radius:0;
+			padding:2px 2px 2px 5px;
+
+			border:0;
+			width:200px;
+			&:focus{
+				outline:none;
+				//border:1px solid black;
+				background:#EAEAEA;
+				color:#394A59;
+			}
+		}
+		#search-button{
+			border-top-left-radius: 0;
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+			border-bottom-left-radius: 0;
+			-moz-border-radius-topleft: 0;
+			-moz-border-radius-topright: 3px;
+			-moz-border-radius-bottomright: 3px;
+			-moz-border-radius-bottomleft: 0;
+			-webkit-border-top-left-radius: 0;
+			-webkit-border-top-right-radius: 3px;
+			-webkit-border-bottom-right-radius: 3px;
+			-webkit-border-bottom-left-radius: 0;
+			margin-left:-4px;
+			background: url('../images/search.png') #5D7987 no-repeat 2px 2px;
+			border:0;
+			height:23px;
+			width:25px;
+			text-indent:-999px;
+		}
+	}
+}
+
+#sidebar{
+	width:100px;
+	height:100%;
+	position:fixed;
+	left:20px;
+	top:50px;
+	ul{
+		list-style:none;
+		margin:0;
+		padding:0;
+		a{
+			text-indent:-9999px;
+			display:block;
+			width:47px;
+			height:47px;
+			margin:30px 0;
+			&.download{
+				background:url('../images/download.png');
+			}
+			&.upload{
+				background:url('../images/upload.png');
+			}
+		}
+	}
+}
+
+/*
+ * CSS Styles that are needed by jScrollPane for it to operate correctly.
+ *
+ * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+ * may not operate correctly without them.
+ */
+
+.jspContainer
+{
+	overflow: hidden;
+	position: relative;
+}
+
+.jspPane
+{
+	position: absolute;
+}
+
+.jspVerticalBar
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 16px;
+	height: 100%;
+	background: red;
+}
+
+.jspHorizontalBar
+{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 16px;
+	background: red;
+}
+
+.jspVerticalBar *,
+.jspHorizontalBar *
+{
+	margin: 0;
+	padding: 0;
+}
+
+.jspCap
+{
+	display: none;
+}
+
+.jspHorizontalBar .jspCap
+{
+	float: left;
+}
+
+.jspTrack
+{
+	background: #5D7987;
+	position: relative;
+}
+
+.jspDrag
+{
+	background: #666;
+	position: relative;
+	top: 0;
+	left: 0;
+	cursor: pointer;
+}
+
+.jspHorizontalBar .jspTrack,
+.jspHorizontalBar .jspDrag
+{
+	float: left;
+	height: 100%;
+}
+
+.jspArrow
+{
+	background: #50506d;
+	text-indent: -20000px;
+	display: block;
+	cursor: pointer;
+}
+
+.jspArrow.jspDisabled
+{
+	cursor: default;
+	background: #80808d;
+}
+
+.jspVerticalBar .jspArrow
+{
+	height: 16px;
+}
+
+.jspHorizontalBar .jspArrow
+{
+	width: 16px;
+	float: left;
+	height: 100%;
+}
+
+.jspVerticalBar .jspArrow:focus
+{
+	outline: none;
+}
+
+.jspCorner
+{
+	background: #eeeef4;
+	float: left;
+	height: 100%;
+}
+
+//Yuk! CSS Hack for IE6 3 pixel bug :( 
+* html .jspCorner
+{
+	margin: 0 -3px 0 0;
+}
