@@ -7,14 +7,6 @@
 	</div>
 	<div role="main" id="main">
 		<div id="first-level" class="level-container">
-			<div class="scrollbar">
-				<div class="track">
-					<div class="thumb">
-						<div class="end"></div>
-					</div>
-				</div>
-			</div>
-			<div class="viewport">
 				<ul class="folders">
 				<!-- ko foreach: folders -->
 	      			<li class="directory" data-bind=" css: { active: $data.path.split('/').last() == $root.firstLevelActive()}, click: $root.goToLevels">
@@ -27,7 +19,6 @@
 				    </li>
 	    		<!-- /ko -->
 				</ul>
-			</div>
 		</div>
 		<div id="second-level" class="level-container">
 			<ul class="folders">

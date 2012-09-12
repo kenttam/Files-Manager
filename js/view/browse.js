@@ -3,6 +3,7 @@ var base_url = "/test_bank";
 
 $(document).ready(function(){
 	$('#first-level').jScrollPane();
+	browse.init();
 });
 
 $("#search-input").on('keyup', function(){
@@ -109,11 +110,6 @@ function FolderViewModel() {
         	var route = this.params.splat[0];
         	var level = route.split("/").length;  // this would tell me which level I'm on
         	browse.goToLevel(route, level);	
-        	/*$.get( base_url+'/browse/directory_map', { 'directory' : route } , function(data){
-	        	var s_data = jQuery.parseJSON(data);
-	        	//self.secondLevelFolders(s_data.directories);
-	        	//self.secondLevelFiles(s_data.files);
-	        });*/
         });
 
         //gotolevel3
@@ -199,12 +195,17 @@ function positionSearchResults(){
 
 var browse = {
 	init: function(){
-
+		$(".directory-link").live("click", this.changeLocation);
+		this.goToLevel("", 0);
 	},
 	goToLevel: function(route, level){
         $.get(base_url+'/browse/directory_map2', { 'directory' : route } , function(data){
-    		$(".level-container").eq(level).children(".viewport").html(data);
+    		$(".level-container").eq(level).html(data);
     	});
+	},
+	changeLocation: function(){
+		location.hash = $(this).attr("data-path");
+		return false;
 	}
 }
 	

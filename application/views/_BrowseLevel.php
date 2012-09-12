@@ -21,14 +21,14 @@
 		echo $value["name"];
 		echo $value["type"];*/?>
 		<li class="directory">
-			<a class='directory-link' href="<?php echo base_url().'files/'.$value['path'];?>"><?php echo $value['name']?></a>
+			<a class='directory-link' href="<?php echo base_url().'files/'.$value['path'];?>" data-path="<?php echo $value['path'];?>"><?php echo $value['name']?></a>
 		</li>
 	<?php 
 	}
 
 	foreach($files as $key => $value){?>
 		<li class="directory">
-			<a class='directory-link' href="<?php echo base_url().'files/'.$value['path'];?>"><?php echo $value['name']?></a>
+			<a class='file-link' href="<?php echo base_url().'files/'.$value['path'];?>"><?php echo $value['name']?></a>
 		</li>
 	<?php 
 	}
