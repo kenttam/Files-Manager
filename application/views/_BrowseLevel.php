@@ -27,7 +27,7 @@
 	}
 
 	foreach($files as $key => $value){?>
-		<li class="directory">
+		<li class="file <?php echo $value["type"]?>">
 			<a class='file-link' href="<?php echo base_url().'files/'.$value['path'];?>"><?php echo $value['name']?></a>
 		</li>
 	<?php 

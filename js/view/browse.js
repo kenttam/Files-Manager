@@ -2,7 +2,6 @@ var base_url = "/test_bank";
 
 
 $(document).ready(function(){
-	$('#first-level').jScrollPane();
 	browse.init();
 });
 
@@ -18,19 +17,14 @@ $("#search-form").click(function(event){
 	 event.stopPropagation();
 });
 
-$("#search-form").blur(function(){
-	$("#search-results").hide();
-});
-
-$('html').click(function() {
-	undoFourth();
-	$("#search-results").hide();
-});
 $('#fourth-level, #third-level').click(function(event){
 	 event.stopPropagation();
 });
 
 
+$("#search-form").click(function(event){
+	 event.stopPropagation();
+});
 
 
 // This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
@@ -60,7 +54,7 @@ function FolderViewModel() {
 	self.queryString = ko.observable("");
 	self.searchResultsDirectories = ko.computed(function(){
 		if(self.queryString() != ""){
-			$.post('<?php echo base_url();?>index.php/browse/search', { 'term' :  self.queryString()}, function(data){
+			$.post(base_url+'/browse/search', { 'term' :  self.queryString()}, function(data){
 	        	var s_data = jQuery.parseJSON(data);
 	        	self.searchResultsFiles(s_data.files);
 	        	self.searchResultsFolders(s_data.directory);
@@ -113,7 +107,7 @@ function FolderViewModel() {
         });
 
         //gotolevel3
-       	this.get('#:subject/:course', function(){ //level2
+       	/*this.get('#:subject/:course', function(){ //level2
        		if(!$("#second-level").find("a").html()){
 		        $.get(base_url+'/browse/directory_map', { 'directory' :  this.params.subject}, function(data){
 		        	var s_data = jQuery.parseJSON(data);
@@ -169,6 +163,7 @@ function FolderViewModel() {
 				$("#fourth-level").show();
 			});
         });
+		*/
     	
     }).run(); 
 
@@ -184,28 +179,70 @@ function undoFourth(){
 	$(".custom-menu").hide(); //custom menu
 }
 
-function positionSearchResults(){
-	$( "#search-results" ).position({
-		of: $( "#search-input" ),
-		my: "left bottom",
-		at: "left top",
-		offset: "0 -5",
-	});
-};
-
 var browse = {
+	folder : false,
 	init: function(){
-		$(".directory-link").live("click", this.changeLocation);
 		this.goToLevel("", 0);
+		$(".level-container").on("click", ".directory-link", this.changeLocation);
+		$(".level-container").on("click", ".directory-link", this.makeLinkActive);
+		$("#search-form").blur(this.hideSearchResults);
+		$("html").click(this.hideSearchResults);
 	},
 	goToLevel: function(route, level){
         $.get(base_url+'/browse/directory_map2', { 'directory' : route } , function(data){
-    		$(".level-container").eq(level).html(data);
+        	if(level >= $(".level-container").length){
+        		browse.createNewLevel();
+        	}
+        	else{
+    			$(".level-container").eq(level).html(data).jScrollPane();
+    		}
     	});
 	},
 	changeLocation: function(){
 		location.hash = $(this).attr("data-path");
 		return false;
+	},
+	hideSearchResults: function(){
+		$("#search-results").hide();
+	},
+	makeLinkActive: function(){
+		//remove all "active" from the current level 
+		var currentLevelContainer = $(this).parents(".level-container");
+		currentLevelContainer.find(".active").removeClass("active");
+		$(this).parent().addClass("active");
+
+		browse.removeHigherLevel(currentLevelContainer);
+	},
+	createNewLevel: function(){
+		$("#main").append("<div class='level-container'></div>");
+		var $levelContainer = $(".level-container");
+		$levelContainer.last().css("left", 900);
+		var numLevels = $levelContainer.length;
+		$levelContainer.eq(numLevels - 1).animate({"left": "-=300"});
+		$levelContainer.eq(numLevels - 2).animate({"left": "-=300"});
+		$levelContainer.eq(numLevels - 3).animate({"left": "-=300"});
+		browse.folded = true;
+	},
+	removeHigherLevel: function(currentLevelContainer){
+		//remove all higher level's active
+		var $levelContainer = $(".level-container");
+		var currentLevel = $levelContainer.index(currentLevelContainer);
+		var levelCount = $levelContainer.length;
+		for (var x = currentLevel+1; x < levelCount; x++){
+			$levelContainer.eq(x).html("");
+		}
+
+		if(levelCount > 3){ 
+			//must have levels folded
+			//the current level will have to go to the second slot
+			var lastValidLevel = currentLevelContainer.animate({"left": "+=300"})
+				.next().animate({"left": "+=300"});
+			var lastIndex = currentLevel+1;
+			for(var x = levelCount; x > currentLevel; x--){
+				$levelContainer.last().remove();
+			}
+		} 
+		//slide levels back if needed
 	}
 }
 	

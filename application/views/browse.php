@@ -48,19 +48,5 @@
     		<!-- /ko -->
 			</ul>
 		</div>
-		<div id="fourth-level" class="level-container">
-			<ul class="folders">
-			<!-- ko foreach: fourthLevelFolders -->
-      			<li class="directory">
-			        <a class='directory-link' data-bind="text: $data.name, attr: { href: '<?php echo base_url();?>files/'+$data.path}"></a>
-			    </li>
-    		<!-- /ko -->
-    		<!-- ko foreach: fourthLevelFiles -->
-      			<li class="file" data-bind=" class: $data.type">
-			        <a class='directory-link' data-bind="text: $data.name, attr: { href: '<?php echo base_url();?>files/'+$data.path }"></a>
-			    </li>
-    		<!-- /ko -->
-			</ul>
-		</div>
 	</div>
 
