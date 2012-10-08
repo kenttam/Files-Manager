@@ -103,7 +103,8 @@ function FolderViewModel() {
         this.get(/\#(.*)/, function(){ 
         	var route = this.params.splat[0];
         	var level = route.split("/").length;  // this would tell me which level I'm on
-        	browse.goToLevel(route, level);	
+        	browse.goToLevel(route, level, false);
+        	//browse.changeLocation();	
         });
     	
     }).run(); 
@@ -133,28 +134,36 @@ var browse = {
 	initializeLevels: function(){
 		var hash = window.location.hash.substr(1);
 		var hashArray = hash.split("/");
-		this.goToLevel("", 0);
+		this.goToLevel("", 0, true);
 		var temp = "";
 		for(var x = 0; x < hashArray.length; x++){
+			if(hashArray[x] == ""){
+				continue;
+			}
+
+			//var folderClicked = hashArray[x];
+			//$(".level-container").eq(x).find("a[data-path='"+folderClicked+"']").parent().addClass("active");
+			
 			if(x+1 > 2){
 				this.createNewLevel();
 				this.shiftAllLevels();
 			}
+
 			temp += hashArray[x]+"/";
-			this.goToLevel(temp, x+1);
+			this.goToLevel(temp, x+1, true);
+
 		}
 		
 	},
-	goToLevel: function(route, level){
+	goToLevel: function(route, level, initCall){
         $.get(base_url+'/browse/directory_map2', { 'directory' : route } , function(data){
-        	/*if(level >= $(".level-container").length){
-        		//browse.createNewLevel();
-        		//browse.removeHigherLevel(browse.currentLevelContainer);
-        	}
-        	else{
-    			$(".level-container").eq(level).html(data).jScrollPane();
-    		}*/
     		$(".level-container").eq(level).html(data).jScrollPane();
+    		if(initCall){
+    			//var routeArray = route.split("/");
+    			//var folderClicked = routeArray[routeArray.length - 2]; //second to last element
+				$(".level-container").eq(level-1).find("a[data-path='"+route.substr(0, route.length-1)+"']").parent().addClass("active");
+    		}
+
     	});
 	},
 	changeLocation: function(){
