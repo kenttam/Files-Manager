@@ -124,11 +124,26 @@ var browse = {
 	folder : false,
 	currentLevelContainer: null,
 	init: function(){
-		this.goToLevel("", 0);
+		this.initializeLevels();
 		$(".level-container").on("click", ".directory-link", this.changeLocation);
 		$(".level-container").on("click", ".directory-link", this.makeLinkActive);
 		$("#search-form").blur(this.hideSearchResults);
 		$("html").click(this.hideSearchResults);
+	},
+	initializeLevels: function(){
+		var hash = window.location.hash.substr(1);
+		var hashArray = hash.split("/");
+		this.goToLevel("", 0);
+		var temp = "";
+		for(var x = 0; x < hashArray.length; x++){
+			if(x+1 > 2){
+				this.createNewLevel();
+				this.shiftAllLevels();
+			}
+			temp += hashArray[x]+"/";
+			this.goToLevel(temp, x+1);
+		}
+		
 	},
 	goToLevel: function(route, level){
         $.get(base_url+'/browse/directory_map2', { 'directory' : route } , function(data){
