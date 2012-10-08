@@ -104,6 +104,26 @@ function FolderViewModel() {
         	var route = this.params.splat[0];
         	var level = route.split("/").length;  // this would tell me which level I'm on
         	browse.goToLevel(route, level, false);
+
+        	var currentLevels = route.split("/");
+        	var lastHashArray = browse.lastHash.split("/");
+
+
+
+        	if(currentLevels.length > 1 &&currentLevels[currentLevels.length-2] != lastHashArray[currentLevels.length-2]){
+        		var subroute = route.substr(0, route.length - currentLevels.last().length);
+        		browse.goToLevel(subroute, level-1, false);
+        	}
+
+        	if(browse.currentLevel < level && level >= 3){ //added a level
+        		browse.createNewLevel();
+				browse.shiftAllLevels();
+        	}
+        	else if (browse.currentLevel > level && level >= 2){ //removed a level
+        		browse.firstLevelClick();
+        	}
+        	browse.currentLevel = level;
+        	browse.lastHash = route;
         	//browse.changeLocation();	
         });
     	
@@ -124,6 +144,8 @@ function undoFourth(){
 var browse = {
 	folder : false,
 	currentLevelContainer: null,
+	currentLevel: 0,
+	lastHash : window.location.hash,
 	init: function(){
 		this.initializeLevels();
 		$(".level-container").on("click", ".directory-link", this.changeLocation);
@@ -157,12 +179,13 @@ var browse = {
 	},
 	goToLevel: function(route, level, initCall){
         $.get(base_url+'/browse/directory_map2', { 'directory' : route } , function(data){
-    		$(".level-container").eq(level).html(data).jScrollPane();
-    		if(initCall){
-    			//var routeArray = route.split("/");
+    		$(".level-container").eq(level).html(data).jScrollPane();    			//var routeArray = route.split("/");
     			//var folderClicked = routeArray[routeArray.length - 2]; //second to last element
-				$(".level-container").eq(level-1).find("a[data-path='"+route.substr(0, route.length-1)+"']").parent().addClass("active");
+    		if(route.substr(-1) != "/"){ //to make data consistent
+    			route+="/";
     		}
+    		$(".level-container").eq(level-1).find(".active").removeClass("active");
+			$(".level-container").eq(level-1).find("a[data-path='"+route.substr(0, route.length-1)+"']").parent().addClass("active");
 
     	});
 	},
@@ -209,6 +232,8 @@ var browse = {
 		$("#main").append("<div class='level-container'></div>");
 		var $levelContainer = $(".level-container");
 		$levelContainer.last().css("left", 900);
+		$levelContainer.last().on("click", ".directory-link", this.changeLocation);
+		$levelContainer.last().on("click", ".directory-link", this.makeLinkActive);
 	},
 	shiftAllLevels: function(){
 		var $levelContainer = $(".level-container");
