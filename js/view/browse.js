@@ -105,65 +105,6 @@ function FolderViewModel() {
         	var level = route.split("/").length;  // this would tell me which level I'm on
         	browse.goToLevel(route, level);	
         });
-
-        //gotolevel3
-       	/*this.get('#:subject/:course', function(){ //level2
-       		if(!$("#second-level").find("a").html()){
-		        $.get(base_url+'/browse/directory_map', { 'directory' :  this.params.subject}, function(data){
-		        	var s_data = jQuery.parseJSON(data);
-		        	self.secondLevelFolders(s_data.directories);
-		        	self.secondLevelFiles(s_data.files);
-		        	//alert(s_data);
-		        });
-		        self.firstLevelActive(this.params.subject);
-	    	}	
-	    	//third level
-        	$.get(base_url+'/browse/directory_map', { 'directory' :  this.params.subject+"/"+this.params.course}, function(data){
-	        	var s_data = jQuery.parseJSON(data);
-	        	self.thirdLevelFolders(s_data.directories);
-	        	self.thirdLevelFiles(s_data.files);
-	        	//alert(s_data);
-	        });
-	        self.secondLevelActive(this.params.course);
-	        undoFourth();
-	        self.thirdLevelActive("");
-
-        });
-
-       	//gotolevel4
-        this.get('#:subject/:course/:folder', function(){
-	        if(!$("#third-level").find("a").html()){
-		        $.get(base_url+'/browse/directory_map', { 'directory' :  this.params.subject+"/"+this.params.course}, function(data){
-		        	var s_data = jQuery.parseJSON(data);
-		        	self.thirdLevelFolders(s_data.directories);
-		        	self.thirdLevelFiles(s_data.files);
-		        	//alert(s_data);
-		        });
-		        self.secondLevelActive(this.params.course);
-		    }
-	        if(!$("#second-level").find("a").html()){
-		        $.get('base_url+/browse/directory_map', { 'directory' :  this.params.subject}, function(data){
-		        	var s_data = jQuery.parseJSON(data);
-		        	self.secondLevelFolders(s_data.directories);
-		        	self.secondLevelFiles(s_data.files);
-		        	//alert(s_data);
-		        });
-		        self.firstLevelActive(this.params.subject);
-	    	}	
-
-	    	$.get(base_url+'/browse/directory_map', { 'directory' :  this.params.subject+"/"+this.params.course+"/"+this.params.folder}, function(data){
-	        	var s_data = jQuery.parseJSON(data);
-	        	self.fourthLevelFolders(s_data.directories);
-	        	self.fourthLevelFiles(s_data.files);
-	        	//alert(s_data);
-	        });
-	        self.thirdLevelActive(this.params.folder);
-	       	//animation
-	        $("#second-level").animate({marginLeft: "-235px"}, function(){
-				$("#fourth-level").show();
-			});
-        });
-		*/
     	
     }).run(); 
 
@@ -181,6 +122,7 @@ function undoFourth(){
 
 var browse = {
 	folder : false,
+	currentLevelContainer: null,
 	init: function(){
 		this.goToLevel("", 0);
 		$(".level-container").on("click", ".directory-link", this.changeLocation);
@@ -190,16 +132,44 @@ var browse = {
 	},
 	goToLevel: function(route, level){
         $.get(base_url+'/browse/directory_map2', { 'directory' : route } , function(data){
-        	if(level >= $(".level-container").length){
-        		browse.createNewLevel();
+        	/*if(level >= $(".level-container").length){
+        		//browse.createNewLevel();
+        		//browse.removeHigherLevel(browse.currentLevelContainer);
         	}
         	else{
     			$(".level-container").eq(level).html(data).jScrollPane();
-    		}
+    		}*/
+    		$(".level-container").eq(level).html(data).jScrollPane();
     	});
 	},
 	changeLocation: function(){
 		location.hash = $(this).attr("data-path");
+		browse.currentLevelContainer = $(this).parents(".level-container");
+
+		var index = $(".level-container").index(browse.currentLevelContainer);
+		var length = $(".level-container").length;
+
+		var level = 4 - (length - index);
+
+		switch(level){
+			case 1:
+				//if first stack has more than one or more than 3 total level then shift
+				//else no shift so need to clear third
+				browse.firstLevelClick();
+				break;
+			case 2:
+				//never initiates a shift
+				break;
+			case 3:
+				//always shifts
+				//create new column
+				browse.createNewLevel();
+				browse.shiftAllLevels();
+				break;
+			default:
+				break;
+		}
+
 		return false;
 	},
 	hideSearchResults: function(){
@@ -210,38 +180,58 @@ var browse = {
 		var currentLevelContainer = $(this).parents(".level-container");
 		currentLevelContainer.find(".active").removeClass("active");
 		$(this).parent().addClass("active");
-
-		browse.removeHigherLevel(currentLevelContainer);
 	},
 	createNewLevel: function(){
 		$("#main").append("<div class='level-container'></div>");
 		var $levelContainer = $(".level-container");
 		$levelContainer.last().css("left", 900);
+	},
+	shiftAllLevels: function(){
+		var $levelContainer = $(".level-container");
 		var numLevels = $levelContainer.length;
 		$levelContainer.eq(numLevels - 1).animate({"left": "-=300"});
 		$levelContainer.eq(numLevels - 2).animate({"left": "-=300"});
 		$levelContainer.eq(numLevels - 3).animate({"left": "-=300"});
-		browse.folded = true;
+	},
+	firstLevelClick: function(){
+		//if first stack has more than one or more than 3 total level then shift
+		//else no shift so need to clear third
+		var $levelContainer = $(".level-container");
+		var numLevels = $levelContainer.length;
+		if(numLevels > 3){
+			$levelContainer.eq(numLevels-2).animate({"left": "+=300"});
+			$levelContainer.eq(numLevels-3).animate({"left": "+=300"});
+			$levelContainer.eq(numLevels-1).remove();
+		}
+		else{
+			$levelContainer.eq(numLevels-1).html("");
+		}
+
 	},
 	removeHigherLevel: function(currentLevelContainer){
-		//remove all higher level's active
-		var $levelContainer = $(".level-container");
+		//only happens by clicking on first
+		//only need to clear third level
+
+
+
+		/*var $levelContainer = $(".level-container");
 		var currentLevel = $levelContainer.index(currentLevelContainer);
 		var levelCount = $levelContainer.length;
 		for (var x = currentLevel+1; x < levelCount; x++){
 			$levelContainer.eq(x).html("");
 		}
 
-		if(levelCount > 3){ 
+		if(levelCount > 3 && currentLevel <= levelCount - 1){ 
 			//must have levels folded
 			//the current level will have to go to the second slot
-			var lastValidLevel = currentLevelContainer.animate({"left": "+=300"})
-				.next().animate({"left": "+=300"});
+			var lastValidLevel = currentLevelContainer.animate({"left": "600px"})
+				.next().animate({"left": "900px"});
 			var lastIndex = currentLevel+1;
-			for(var x = levelCount; x > currentLevel; x--){
+			for(var x = levelCount; x > currentLevel + 1; x--){
 				$levelContainer.last().remove();
 			}
-		} 
+		}*/
+			
 		//slide levels back if needed
 	}
 }
