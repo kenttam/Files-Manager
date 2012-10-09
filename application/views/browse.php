@@ -35,18 +35,6 @@
 			</ul>
 		</div>
 		<div id="third-level" class="level-container">
-			<ul class="folders">
-			<!-- ko foreach: thirdLevelFolders -->
-      			<li class="directory" data-bind=" css: { active: $data.path.split('/').last() == $root.thirdLevelActive() }, click: $root.goToLevels">
-			        <a class='directory-link' data-bind="text: $data.name, attr: { href: '<?php echo base_url();?>files/'+$data.path}"></a>
-			    </li>
-    		<!-- /ko -->
-    		<!-- ko foreach: thirdLevelFiles -->
-      			<li class="file" data-bind=" class: $data.type">
-			        <a class='directory-link' data-bind="text: $data.name, attr: { href: '<?php echo base_url();?>files/'+$data.path }"></a>
-			    </li>
-    		<!-- /ko -->
-			</ul>
 		</div>
 	</div>
 

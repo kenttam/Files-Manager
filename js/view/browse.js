@@ -66,9 +66,9 @@ function undoFourth(){
 var browse = {
 	folder : false,
 	currentLevelContainer: null,
-	currentLevel: 0,
+	currentLevel: window.location.hash === "" ? 0 : window.location.hash.split("/").length,
 	returned:0,
-	lastHash : window.location.hash,
+	lastHash : window.location.hash.substr(1),
 	levelQueue : $({}),
 	init: function(){
 		this.initializeLevels();
@@ -110,7 +110,7 @@ var browse = {
     			next();
     		});
     		browse.returned++;
-    		if(browse.returned === $(".level-container").length){
+    		if(browse.returned === $(".level-container").length || (browse.returned == 2 && $(".level-container").length == 3 && $(".length-container").eq(2).text() == "" && window.location.hash.substr(0, window.location.hash.length-1 ).split("/").length == 1)){
     			browse.levelQueue.dequeue('level');
     			browse.returned = 0;
     		}
