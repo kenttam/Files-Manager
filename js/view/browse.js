@@ -67,7 +67,7 @@ Sammy(function() {
     		}
     	}
 
-    	browse.makeBreadcrumb(route);
+    	browse.makeBreadcrumb();
     	//browse.changeLocation();	
     });
 	
@@ -94,6 +94,7 @@ var browse = {
 		$(".level-container").on("click", ".directory-link", this.makeLinkActive);
 		$("#search-form").blur(this.hideSearchResults);
 		$("html").click(this.hideSearchResults);
+		$("#breadcrumb").on("click", "a", this.followBreadcrumb);
 	},
 	initializeLevels: function(){
 		var hash = window.location.hash.substr(1);
@@ -114,6 +115,7 @@ var browse = {
 			this.goToLevel(temp, x+1, true);
 
 		}
+		this.makeBreadcrumb();
 		
 	},
 	goToLevel: function(route, level, initCall){
@@ -207,7 +209,8 @@ var browse = {
 			$levelContainer.eq(numLevels-1).html("");
 		}
 	},
-	makeBreadcrumb: function(route){
+	makeBreadcrumb: function(){
+		route = window.location.hash;
 		var routeArray = route.split("/");
 		var temp = "";
 		var breadcrumbHtml = "<li><a href='/test_bank'>Root</a></li>";
@@ -215,11 +218,28 @@ var browse = {
 			if(routeArray[x].length === 0){
 				continue;
 			}
+			if(x === 0){
+				routeArray[x] = routeArray[x].substr(1);
+			}
 			temp += routeArray[x];
 			breadcrumbHtml += ("<li><a href='#"+temp+"'>"+routeArray[x]+"</a></li>");
 			temp += "/";
 		}
 		$("#breadcrumb").html(breadcrumbHtml);
+	},
+	followBreadcrumb: function(){
+		//follow breadcrumb that are farther back so just gonna refresh the page
+		var $li = $(this).parent(),
+			index = $("#breadcrumb li").index($li),
+			length = $("#breadcrumb").find("li").length,
+			hash = $(this).attr("href");
+		if(index < length - 2) {
+			//document.location.reload();
+			window.location.hash = hash;
+			$("body").fadeOut("fast");
+			document.location.reload();
+		}
+
 	}
 }
 	
