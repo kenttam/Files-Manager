@@ -67,7 +67,7 @@ Sammy(function() {
     		}
     	}
 
-    	browse.makeBreadcrumb();
+    	browse.makeBreadcrumb(route);
     	//browse.changeLocation();	
     });
 	
@@ -210,10 +210,14 @@ var browse = {
 	makeBreadcrumb: function(route){
 		var routeArray = route.split("/");
 		var temp = "";
-		var breadcrumbHtml = "";
+		var breadcrumbHtml = "<li><a href='/test_bank'>Root</a></li>";
 		for(var x = 0; x < routeArray.length; x++){
-			temp += (routeArray[x] + "/");
+			if(routeArray[x].length === 0){
+				continue;
+			}
+			temp += routeArray[x];
 			breadcrumbHtml += ("<li><a href='#"+temp+"'>"+routeArray[x]+"</a></li>");
+			temp += "/";
 		}
 		$("#breadcrumb").html(breadcrumbHtml);
 	}
