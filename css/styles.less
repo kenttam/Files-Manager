@@ -8,11 +8,18 @@ body{
 	margin:0;
 }
 
-#main{
-
+#wrap{
 	width:960px;
-	margin:60px auto;
+	margin:80px auto;
 	position:relative;
+	#breadcrumb{
+		list-style:none;
+		margin:0 0 10px 0;
+		padding:0;
+		li:after{
+			content:" / ";
+		}
+	}
 }
 
 .level-container{
@@ -20,8 +27,7 @@ body{
 	position:absolute;
 	background:white;
 	margin-right:10px;
-	margin-top:20px;
-	padding:10px 0;
+	padding:0 0;
 	height:500px;
 	overflow:auto;
     -webkit-box-shadow:  -5px 3px 5px 1px #eee;
@@ -29,7 +35,7 @@ body{
     box-shadow:  -5px 3px 5px 1px #eee;    
 	ul{
 		list-style-type: none;
-		padding: 0px;
+		padding: 10px 0 0 0 ;
 		margin: 0px;
 	}
 	li{

@@ -45,11 +45,29 @@ Sammy(function() {
     		browse.createNewLevel();
 			browse.shiftAllLevels();
     	}
-    	else if (browse.currentLevel > level && level >= 2){ //removed a level
+    	else if (browse.currentLevel > level){ //removed a level
     		browse.firstLevelClick();
     	}
     	browse.currentLevel = level;
     	browse.lastHash = route;
+
+
+
+    	var temp = "";
+    	
+    	for(var x = 0; x < currentLevels.length; x++){ //this is for backbuttons where the levels already exists
+    		temp += currentLevels[x] + "/";
+    		browse.makeLinkActiveCallback(temp, x+1);
+    	}
+    	if(currentLevels.length < $(".level-container active").length){
+    		var currentLength = currentLevels.length;
+    		while(currentLength < $(".level-container active").length){
+    			$(".level-container").eq($(".level-container active").length).find("active").removeClass("active");
+
+    		}
+    	}
+
+    	browse.makeBreadcrumb();
     	//browse.changeLocation();	
     });
 	
@@ -188,7 +206,16 @@ var browse = {
 		else{
 			$levelContainer.eq(numLevels-1).html("");
 		}
-
+	},
+	makeBreadcrumb: function(route){
+		var routeArray = route.split("/");
+		var temp = "";
+		var breadcrumbHtml = "";
+		for(var x = 0; x < routeArray.length; x++){
+			temp += (routeArray[x] + "/");
+			breadcrumbHtml += ("<li><a href='#"+temp+"'>"+routeArray[x]+"</a></li>");
+		}
+		$("#breadcrumb").html(breadcrumbHtml);
 	}
 }
 	
