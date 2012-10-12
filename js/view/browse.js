@@ -236,8 +236,9 @@ var browse = {
 		if(index < length - 2) {
 			//document.location.reload();
 			window.location.hash = hash;
-			$("body").fadeOut("fast");
-			document.location.reload();
+			$("body").fadeOut("fast", function(){
+				document.location.reload();
+			});
 		}
 
 	}
