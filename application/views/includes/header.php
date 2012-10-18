@@ -39,7 +39,7 @@
 	<header>
 	<!--fb:login-button autologoutlink='true' id='loginButton'></fb:login-button-->
     <div id="fb-root"></div>
-    <img id="logo" src="<?php echo base_url();?>images/botoslogo.png" />
+   
     <?php 
     	//$attributes = array( 'id' => 'search-form', 'data-bind' => 'hasFocus: searchIsSelected');
 		//echo form_open('browse/search', $attributes);?>

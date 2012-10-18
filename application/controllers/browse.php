@@ -14,14 +14,9 @@ class Browse extends CI_Controller
  
 	public function index()
 	{
-		$config['hostname'] = 'server.local';
-		$config['username'] = 'kent';
-		$config['password'] = 'indiglo';
-		$config['port']     = 21;
-		$config['passive']  = FALSE;
-		$config['debug']    = TRUE;
+		$config = $this->config->load('ftp');
 
-		$this->ftp->connect($config);
+		$this->ftp->connect();
 		$data['file_list'] = $this->ftp->list_files('files/');
 		$data['map'] = $this->directory_listing(directory_map('files/', 2));
 
