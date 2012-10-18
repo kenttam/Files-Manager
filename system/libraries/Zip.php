@@ -289,11 +289,12 @@ class CI_Zip  {
 
 		while (FALSE !== ($file = readdir($fp)))
 		{
+
 			if (substr($file, 0, 1) == '.')
 			{
 				continue;
 			}
-
+			//echo $path.$file."\n";
 			if (@is_dir($path.$file))
 			{
 				$this->read_dir($path.$file."/", $preserve_filepath, $root_path);

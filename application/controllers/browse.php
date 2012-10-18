@@ -200,13 +200,13 @@ class Browse extends CI_Controller
 		}
 	}
 
-	public function zip_file(){
+	public function zip_file($path = "Astronomy/"){
 		$this->load->library('zip');
-		$this->zip->read_dir("files/Soc/"); 
-
+		$this->zip->read_dir("files/".$path, FALSE); 
+		//$name = end(split("/", $path));
 		// Download the file to your desktop. Name it "my_backup.zip"
-		$this->zip->download('my_backup.zip');
-		echo "hello";
+		$this->zip->download('Astronomy'.'.zip');
+		//echo "hello";
 	}
 
 

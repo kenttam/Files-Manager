@@ -55,7 +55,7 @@
 						<li class="category" data-bind="visible: searchResultsFolders().length > 0">Folders</li>
 		    		<!-- ko foreach: searchResultsFolders -->
 		      			<li class="directory" data-bind="class: $data.file_type">
-					        <a class='directory-link' data-bind="text: $data.shortened_name, attr: { title: $data.file_name, href: '<?php echo base_url();?>files/'+$data.file_path }"></a>
+					        <a class='directory-link' data-bind="text: $data.shortened_name, attr: { title: $data.file_name, href: '<?php echo base_url();?>#'+$data.file_path.substr(6) }"></a>
 					    </li>
 		    		<!-- /ko -->
 		    			<li class="category" data-bind="visible: searchResultsFiles().length > 0">Files</li>

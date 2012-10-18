@@ -16,6 +16,7 @@ a:visited{
 	width:960px;
 	margin:80px auto;
 	position:relative;
+	z-index:1;
 	#breadcrumb{
 		list-style:none;
 		margin:0 0 10px 0;
@@ -136,10 +137,13 @@ a:visited{
 	overflow-x: hidden;
 	padding: 8px;
 	position: absolute;
-	z-index: 20;
+	z-index: 200;
 	//left:160px;
 	top:25px;
 	display:none;
+	.content{
+		z-index:200;
+	}
 	.header{
 		height: 26px;
 		position: relative;
@@ -186,6 +190,7 @@ a:visited{
 		padding:0 10px 0 35px; 
 		//list-style:square url("../images/folder_doc.png") 	;
 		line-height:25px;
+		z-index:200;
 	}
 	ul{
 		margin:0;
@@ -202,6 +207,7 @@ header{
 	position:fixed;
 	width:100%;
 	top:0;
+	z-index:2;
 	#logo{
 		height: 45px;
 		margin-top: 2px;
@@ -276,6 +282,15 @@ header{
 			}
 		}
 	}
+}
+
+
+.custom-menu {
+    z-index:1000;
+    position: absolute;
+    background-color:#C0C0C0;
+    border: 1px solid black;
+    padding: 2px;
 }
 
 /*

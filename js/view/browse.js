@@ -17,14 +17,67 @@ $("#search-form").click(function(event){
 	 event.stopPropagation();
 });
 
-$('#fourth-level, #third-level').click(function(event){
-	 event.stopPropagation();
+/*$(document).bind("contextmenu", function(event) { 
+    event.preventDefault();
+    $("<div class='custom-menu'><a href='/test_bank/browse/zip_file' target='_blank'>Download as zip</a></div>")
+        .appendTo("body")
+        .css({top: event.pageY + "px", left: event.pageX + "px"});
+}).bind("click", function(event) {
+    $("div.custom-menu").hide();
+});*/
+
+$("#main").on("contextmenu", ".directory-link", function(event){
+	var path = $(this).attr("data-path");
+    event.preventDefault();
+    $("<div class='custom-menu'><a href='/test_bank/browse/zip_file' target='_blank'>Download as zip</a></div>")
+        .appendTo("body")
+        .css({top: event.pageY + "px", left: event.pageX + "px"});
+});
+
+$(document).click(function(){
+	$("div.custom-menu").hide();
 });
 
 
-$("#search-form").click(function(event){
-	 event.stopPropagation();
-});
+function FolderViewModel() {
+    // Data
+    var self = this;
+
+	self.queryString = ko.observable("");
+	self.searchResultsDirectories = ko.computed(function(){
+		if(self.queryString() != ""){
+			$.post(base_url+'/browse/search', { 'term' :  self.queryString()}, function(data){
+	        	var s_data = jQuery.parseJSON(data);
+	        	self.searchResultsFiles(s_data.files);
+	        	self.searchResultsFolders(s_data.directory);
+	        	return (s_data.directory);
+	        	//console.log($(this).children().first().val());
+	        });
+		}
+		/*else{
+			self.searchResultsFiles();
+	        self.searchResultsFolders();
+		}*/
+	});
+	self.searchResultsFiles = ko.observableArray();
+	self.searchResultsFolders = ko.observableArray();
+	self.resulsExists = ko.computed(function(){
+		//positionSearchResults();
+		if((self.searchResultsFolders().length + self.searchResultsFiles().length > 0) && (self.searchIsSelected()) && (self.queryString() != "")){
+			return true;
+		}
+		else
+			return false;
+	});
+
+	self.searchIsSelected = ko.observable(false);
+
+
+
+};
+
+ko.applyBindings(new FolderViewModel());
+
 
 Sammy(function() {
 	//gotolevel2
@@ -95,6 +148,7 @@ var browse = {
 		$("#search-form").blur(this.hideSearchResults);
 		$("html").click(this.hideSearchResults);
 		$("#breadcrumb").on("click", "a", this.followBreadcrumb);
+		$("#search-results").on("click", ".directory .directory-link", function(){browse.refreshPage($(this).attr("href"))});
 	},
 	initializeLevels: function(){
 		var hash = window.location.hash.substr(1);
@@ -235,12 +289,15 @@ var browse = {
 			hash = $(this).attr("href");
 		if(index < length - 2) {
 			//document.location.reload();
-			window.location.hash = hash;
-			$("body").fadeOut("fast", function(){
-				document.location.reload();
-			});
+			browse.refreshPage(hash);
 		}
 
+	},
+	refreshPage: function(hash){
+		window.location.hash = hash;
+		$("body").fadeOut("fast", function(){
+			document.location.reload();
+		});
 	}
 }
 	
